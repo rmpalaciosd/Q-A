@@ -1,0 +1,326 @@
+<style>
+  #crt1-faq-root {
+    --navy: #182A4D;
+    --navy-soft: #2A4066;
+    --sky: #EAF2FB;
+    --sky-line: #CFE0F2;
+    --teal: #2F8F9D;
+    --teal-dark: #226F7A;
+    --ink: #1F2937;
+    --ink-soft: #5B6B82;
+    --paper: #FFFFFF;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--paper);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(24,42,77,0.08);
+    border: 1px solid var(--sky-line);
+  }
+
+  #crt1-faq-root * { box-sizing: border-box; }
+
+  .cfq-header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
+    color: white;
+    padding: 22px 22px 20px;
+  }
+  .cfq-header .eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #AFC6E6;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .cfq-header h1 {
+    font-size: 19px;
+    margin: 0 0 4px;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .cfq-header p {
+    margin: 0;
+    font-size: 13.5px;
+    color: #C9DAF0;
+    line-height: 1.4;
+  }
+
+  .cfq-body {
+    background: var(--sky);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cfq-chips-label {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--navy-soft);
+    padding: 2px 2px 0;
+  }
+
+  .cfq-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .cfq-chip {
+    background: var(--paper);
+    border: 1px solid var(--sky-line);
+    color: var(--navy);
+    font-size: 13.5px;
+    font-weight: 600;
+    padding: 9px 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    text-align: left;
+    line-height: 1.3;
+    transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+  }
+  .cfq-chip:hover { border-color: var(--teal); background: #F3FAFB; }
+  .cfq-chip:active { transform: scale(0.97); }
+
+  .cfq-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 4px 2px;
+    scroll-behavior: smooth;
+  }
+  .cfq-messages:empty { display: none; }
+
+  .cfq-msg {
+    max-width: 86%;
+    padding: 11px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+  .cfq-msg.user {
+    align-self: flex-end;
+    background: var(--teal);
+    color: white;
+    border-bottom-right-radius: 4px;
+  }
+  .cfq-msg.bot {
+    align-self: flex-start;
+    background: var(--paper);
+    border: 1px solid var(--sky-line);
+    color: var(--ink);
+    border-bottom-left-radius: 4px;
+  }
+
+  .cfq-inputbar {
+    display: flex;
+    gap: 8px;
+    background: var(--paper);
+    border: 1px solid var(--sky-line);
+    border-radius: 14px;
+    padding: 6px 6px 6px 14px;
+  }
+  .cfq-inputbar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14.5px;
+    background: transparent;
+    color: var(--ink);
+    font-family: inherit;
+  }
+  .cfq-inputbar input::placeholder { color: #9AA9BD; }
+  .cfq-send {
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .cfq-send:disabled { opacity: 0.5; cursor: default; }
+  .cfq-send:hover:not(:disabled) { background: var(--teal-dark); }
+
+  .cfq-footnote {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--ink-soft);
+    padding: 2px 8px 0;
+  }
+</style>
+
+<div id="crt1-faq-root">
+  <div class="cfq-header">
+    <div class="eyebrow">Comprensión y Redacción de Textos I</div>
+    <h1>Preguntas frecuentes del curso</h1>
+    <p>Toca una pregunta o escribe la tuya. Respondo al toque, 24/7.</p>
+  </div>
+  <div class="cfq-body">
+    <div class="cfq-chips-label">Las que más preguntan</div>
+    <div class="cfq-chips" id="cfq-chips"></div>
+    <div class="cfq-messages" id="cfq-messages"></div>
+    <div class="cfq-inputbar">
+      <input id="cfq-input" type="text" placeholder="Escribe tu pregunta aquí..." />
+      <button class="cfq-send" id="cfq-send">Enviar</button>
+    </div>
+    <div class="cfq-footnote">Si tu pregunta no está en el temario del curso, se enviará directamente a la profesora.</div>
+  </div>
+</div>
+
+<!-- Formulario oculto para reenviar a la profesora las preguntas que el bot no reconoce -->
+<iframe name="cfq-hidden-frame" style="display:none;"></iframe>
+<form id="cfq-gform" action="https://docs.google.com/forms/d/e/1FAIpQLSdlk0PVFcehJwEVWZezFhpqr4WoyYh8GmXUZHUZEaBz1Bwafw/formResponse" method="POST" target="cfq-hidden-frame" style="display:none;">
+  <input type="text" name="entry.550729940" id="cfq-gform-categoria" />
+  <input type="text" name="entry.1085796528" id="cfq-gform-pregunta" />
+</form>
+
+<script>
+(function() {
+  const FAQ = [
+    {
+      q: "¿El trabajo es obligatoriamente en equipo?",
+      a: "No. Puedes trabajar de manera individual o en equipos de hasta cuatro en todas las tareas, salvo el examen final, que es en pareja.",
+      keywords: ["equipo", "grupal", "individual", "solo", "pareja", "grupo de trabajo"]
+    },
+    {
+      q: "¿Tenemos clase todas las semanas?",
+      a: "No. El curso es asíncrono, así que no hay sesiones semanales. Solo hay reuniones informativas una semana antes de cada evaluación.",
+      keywords: ["clase", "todas las semanas", "sesion semanal", "hay clase"]
+    },
+    {
+      q: "¿Hay clases en vivo obligatorias con horario fijo?",
+      a: "No, el curso es asíncrono. Toda la información está en la plataforma: puedes revisar la clase en cada uno de los recursos de la semana. Lo que sí tenemos son reuniones informativas.",
+      keywords: ["vivo", "horario fijo", "asincrono", "asincrónico", "en vivo"]
+    },
+    {
+      q: "¿Las reuniones por Zoom son obligatorias?",
+      a: "No son obligatorias. Si no puedes asistir, no te preocupes: la grabación se comparte a través de los anuncios de UTP+Class.",
+      keywords: ["zoom", "obligatoria la reunion", "reunion obligatoria", "tengo que ir a la reunion"]
+    },
+    {
+      q: "No puedo acceder a la grabación o al enlace de la sesión",
+      a: "Para ingresar a una reunión debes hacerlo con tus credenciales de la universidad (correo y contraseña). La grabación se publica en los anuncios de la plataforma. Si no la encuentras, o la encuentras pero no puedes ingresar, escribe por el foro de consultas para revisar qué está ocurriendo.",
+      keywords: ["grabacion", "no puedo entrar", "enlace no funciona", "no carga", "no accedo", "link de la reunion"]
+    },
+    {
+      q: "¿Por qué tengo cero en esta tarea?",
+      a: "Las tareas son de dos tipos: calificadas y no calificadas. Las no calificadas muestran un cero por defecto solo para poder guardar el mensaje de retroalimentación, que es lo importante ahí, así que no te preocupes. Si el cero aparece en una evaluación calificada de las que figuran en el sílabo, ahí sí debes comunicarte por el foro de consultas o el chat.",
+      keywords: ["cero", "nota en cero", "por que tengo cero", "calificacion cero"]
+    },
+    {
+      q: "¿Cuál es el link del grupo de WhatsApp?",
+      a: "El link del grupo de WhatsApp de tu sección está publicado en la plataforma, en un anuncio antes del inicio de ciclo. Revisa la sección de anuncios.",
+      keywords: ["whatsapp", "grupo de whatsapp", "link del grupo"]
+    },
+    {
+      q: "¿Cuándo son las próximas reuniones informativas?",
+      a: "Están programadas una semana antes de cada evaluación: semanas 2, 6, 10, 14 y 17, siempre los lunes a las 7:00 p.m. Fechas: 17 de agosto (TA1), 14 de septiembre, 12 de octubre, 9 de noviembre y 30 de noviembre. También puedes revisar el anuncio con el cronograma completo de reuniones en UTP+Class.",
+      keywords: ["cuando es la reunion", "proxima reunion", "fecha de la reunion", "cronograma de reuniones"]
+    },
+    {
+      q: "¿Cómo debo nombrar mi archivo?",
+      a: "Si es una tarea no calificada: la letra S, el número de semana, guion bajo y tu apellido. Ejemplo: S2_Palacios. Si es una tarea calificada: el nombre de la evaluación, guion bajo y tu apellido (o el apellido de quien lidera el equipo). Ejemplo: TA1_Palacios o PC1_Palacios.",
+      keywords: ["nombrar archivo", "nombre del archivo", "como le pongo", "como se llama el archivo"]
+    },
+    {
+      q: "No entregué la tarea a tiempo, ¿puedo enviarla por otro medio?",
+      a: "No. Según las disposiciones de la universidad, no se pueden recibir trabajos calificados ni no calificados por medios que no sean los oficiales. Solo se reciben a través de la tarea correspondiente en UTP+Class; no puedo aceptar entregas por chat, correo ni WhatsApp.",
+      keywords: ["entregue tarde", "fuera de plazo", "por otro medio", "te lo envio por correo", "atrasado", "no llegue a tiempo"]
+    }
+  ];
+
+  const DEFAULT_CATEGORY = "Cómo se lleva a cabo el curso";
+  const FALLBACK_TEXT = "Esa pregunta no está en las que tengo registradas todavía. La estoy reenviando directamente a la profesora Romy; también puedes escribirle por el foro de consultas de la plataforma.";
+
+  const chipsEl = document.getElementById('cfq-chips');
+  const messagesEl = document.getElementById('cfq-messages');
+  const inputEl = document.getElementById('cfq-input');
+  const sendBtn = document.getElementById('cfq-send');
+  const gformCategoria = document.getElementById('cfq-gform-categoria');
+  const gformPregunta = document.getElementById('cfq-gform-pregunta');
+  const gform = document.getElementById('cfq-gform');
+
+  FAQ.forEach(item => {
+    const chip = document.createElement('button');
+    chip.className = 'cfq-chip';
+    chip.textContent = item.q;
+    chip.addEventListener('click', () => askDirect(item.q, item.a));
+    chipsEl.appendChild(chip);
+  });
+
+  function addMessage(text, sender) {
+    const msg = document.createElement('div');
+    msg.className = `cfq-msg ${sender}`;
+    msg.textContent = text;
+    messagesEl.appendChild(msg);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return msg;
+  }
+
+  function normalize(str) {
+    return str
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+  }
+
+  function findMatch(userText) {
+    const normalizedInput = normalize(userText);
+    let best = null;
+    let bestScore = 0;
+    FAQ.forEach(item => {
+      let score = 0;
+      item.keywords.forEach(kw => {
+        if (normalizedInput.includes(normalize(kw))) score += 1;
+      });
+      if (score > bestScore) {
+        bestScore = score;
+        best = item;
+      }
+    });
+    return bestScore > 0 ? best : null;
+  }
+
+  function askDirect(question, answer) {
+    addMessage(question, 'user');
+    addMessage(answer, 'bot');
+  }
+
+  function forwardToTeacher(question) {
+    gformCategoria.value = DEFAULT_CATEGORY;
+    gformPregunta.value = question;
+    gform.submit();
+  }
+
+  function askFreeform(question) {
+    addMessage(question, 'user');
+    const match = findMatch(question);
+    if (match) {
+      addMessage(match.a, 'bot');
+    } else {
+      addMessage(FALLBACK_TEXT, 'bot');
+      forwardToTeacher(question);
+    }
+  }
+
+  function handleSend() {
+    const value = inputEl.value.trim();
+    if (!value) return;
+    inputEl.value = '';
+    askFreeform(value);
+  }
+
+  sendBtn.addEventListener('click', handleSend);
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleSend();
+  });
+})();
+</script>
