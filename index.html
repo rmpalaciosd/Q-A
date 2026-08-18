@@ -191,19 +191,9 @@
       keywords: ["equipo", "grupal", "individual", "solo", "pareja", "grupo de trabajo"]
     },
     {
-      q: "¿Tenemos clase todas las semanas?",
-      a: "No. El curso es asíncrono, así que no hay sesiones semanales. Solo hay reuniones informativas una semana antes de cada evaluación.",
-      keywords: ["clase", "todas las semanas", "sesion semanal", "hay clase"]
-    },
-    {
-      q: "¿Hay clases en vivo obligatorias con horario fijo?",
-      a: "No, el curso es asíncrono. Toda la información está en la plataforma: puedes revisar la clase en cada uno de los recursos de la semana. Lo que sí tenemos son reuniones informativas.",
-      keywords: ["vivo", "horario fijo", "asincrono", "asincrónico", "en vivo"]
-    },
-    {
-      q: "¿Las reuniones por Zoom son obligatorias?",
-      a: "No son obligatorias. Si no puedes asistir, no te preocupes: la grabación se comparte a través de los anuncios de UTP+Class.",
-      keywords: ["zoom", "obligatoria la reunion", "reunion obligatoria", "tengo que ir a la reunion"]
+      q: "¿Tenemos clases en vivo, todas las semanas, o son obligatorias las reuniones por Zoom?",
+      a: "El curso es asíncrono, así que no hay clases en vivo con horario fijo ni sesiones todas las semanas. Toda la información está en los recursos de cada semana en la plataforma. Lo único que existe son reuniones informativas por Zoom, una semana antes de cada evaluación, y no son obligatorias: si no puedes asistir, la grabación se comparte en los anuncios de UTP+Class.",
+      keywords: ["clase", "todas las semanas", "sesion semanal", "hay clase", "vivo", "horario fijo", "asincrono", "asincrónico", "en vivo", "zoom", "obligatoria la reunion", "reunion obligatoria", "tengo que ir a la reunion"]
     },
     {
       q: "No puedo acceder a la grabación o al enlace de la sesión",
@@ -246,9 +236,9 @@
       keywords: ["materiales de consulta", "donde encuentro los materiales", "donde estan los recursos", "material de lectura"]
     },
     {
-      q: "¿Cómo hago la tarea?",
-      a: "Primero revisa todo el material de la semana correspondiente. Si después de revisarlo tienes dudas, consulta a la docente por el foro de consultas.",
-      keywords: ["como hago la tarea", "como realizo la tarea", "por donde empiezo la tarea"]
+      q: "¿Cómo hago la TA1?",
+      a: "Primero revisa el material de la semana correspondiente. Luego ubica las fuentes de información y analízalas en función de la pregunta controversial. Si necesitas más apoyo, revisa este video: https://youtu.be/bLeLGIgJ0gI",
+      keywords: ["como hago la tarea", "como realizo la tarea", "por donde empiezo la tarea", "como hago la ta1", "como realizo la ta1"]
     },
     {
       q: "¿Cómo veo los anuncios?",
@@ -269,11 +259,26 @@
       q: "¿Cómo ingreso a la plataforma?",
       a: "Ingresa desde la web a class.utp.edu.pe con tus credenciales institucionales. Para temas de contraseña o problemas de acceso técnico, comunícate con el SAE (Servicio de Atención al Estudiante), ya que eso no lo gestiona la docente directamente.",
       keywords: ["como ingreso a la plataforma", "no puedo entrar a la plataforma", "acceso a la plataforma", "contraseña", "olvide mi clave"]
+    },
+    {
+      q: "¿Quién es el docente del curso?",
+      a: "Revisa la tarjeta de presentación del curso en la lista de tus cursos dentro de la plataforma: ahí aparece el nombre de tu docente. También puedes verlo en la opción 'Personas', donde aparece con la etiqueta de docente, o en cualquier anuncio del curso, que siempre incluye el nombre y correo del docente.",
+      keywords: ["quien es el docente", "quien es mi profesor", "nombre del docente", "quien dicta el curso", "quien es mi profesora"]
+    },
+    {
+      q: "¿Cuál es el tema de la evaluación TA1?",
+      a: "El tema es el que aparece en las fuentes de información de la semana 2: ¿Consideras que el Estado peruano enfrenta adecuadamente el avance de la minería ilegal para evitar la degradación ambiental? Sobre eso debes escribir.",
+      keywords: ["tema de la ta1", "tema de ta1", "sobre que es la ta1", "mineria ilegal", "tema de la evaluacion ta1", "de que trata la ta1"]
+    },
+    {
+      q: "¿Cuál es el tema de la PC1 o de las demás evaluaciones?",
+      a: "Para conocer el tema de las siguientes evaluaciones (PC1, TA2, PC2, examen final), busca las fuentes de información en las actividades de la semana correspondiente a esa evaluación.",
+      keywords: ["tema de la pc1", "tema de la pc2", "tema de la ta2", "tema del examen final", "tema de la evaluacion", "cual es el tema", "de que trata la tarea", "de que trata la evaluacion"]
     }
   ];
 
   const DEFAULT_CATEGORY = "Cómo se lleva a cabo el curso";
-  const FALLBACK_TEXT = "Esa pregunta no está en las que tengo registradas todavía. La estoy reenviando directamente a la profesora Romy; también puedes escribirle por el foro de consultas de la plataforma.";
+  const FALLBACK_TEXT = "Esa pregunta no está en las que tengo registradas todavía. Se la estoy comunicando directamente a tu docente; también puedes escribirle por el foro de consultas de la plataforma.";
 
   const chipsEl = document.getElementById('cfq-chips');
   const messagesEl = document.getElementById('cfq-messages');
