@@ -1,13 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Preguntas frecuentes CRT1</title>
 <style>
+  * { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    padding: 12px;
+    background: #F0F8F6;
+  }
   #crt1-faq-root {
-    --navy: #182A4D;
-    --navy-soft: #2A4066;
-    --sky: #EAF2FB;
-    --sky-line: #CFE0F2;
-    --teal: #2F8F9D;
-    --teal-dark: #226F7A;
+    width: 100%;
+    --navy: #3A7D6D;
+    --navy-soft: #3C6E9E;
+    --sky: #F0F8F6;
+    --sky-line: #DCEEE7;
+    --teal: #6FCF97;
+    --teal-dark: #4FAE79;
     --ink: #1F2937;
-    --ink-soft: #5B6B82;
+    --ink-soft: #5C7A70;
     --paper: #FFFFFF;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--ink);
@@ -18,9 +31,19 @@
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(24,42,77,0.08);
     border: 1px solid var(--sky-line);
+    box-sizing: border-box;
   }
 
   #crt1-faq-root * { box-sizing: border-box; }
+
+  @media (max-width: 480px) {
+    body { padding: 6px; }
+    .cfq-header { padding: 18px 16px 16px; }
+    .cfq-header h1 { font-size: 17px; }
+    .cfq-body { padding: 12px; }
+    .cfq-chip { font-size: 13px; padding: 8px 12px; }
+    .cfq-msg { font-size: 13.5px; max-width: 92%; }
+  }
 
   .cfq-header {
     background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
@@ -31,7 +54,7 @@
     font-size: 12px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #AFC6E6;
+    color: #C3E8D3;
     font-weight: 600;
     margin-bottom: 6px;
   }
@@ -44,7 +67,7 @@
   .cfq-header p {
     margin: 0;
     font-size: 13.5px;
-    color: #C9DAF0;
+    color: #DFF3E9;
     line-height: 1.4;
   }
 
@@ -81,7 +104,7 @@
     line-height: 1.3;
     transition: background 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
   }
-  .cfq-chip:hover { border-color: var(--teal); background: #F3FAFB; }
+  .cfq-chip:hover { border-color: var(--teal); background: #F2FBF6; }
   .cfq-chip:active { transform: scale(0.97); }
 
   .cfq-messages {
@@ -156,6 +179,8 @@
     padding: 2px 8px 0;
   }
 </style>
+</head>
+<body>
 
 <div id="crt1-faq-root">
   <div class="cfq-header">
@@ -364,3 +389,5 @@
   });
 })();
 </script>
+</body>
+</html>
