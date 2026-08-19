@@ -186,6 +186,78 @@
     padding: 6px 8px 0;
     letter-spacing: 0.02em;
   }
+
+  .cfq-faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .cfq-faq-item {
+    background: var(--paper);
+    border: 1px solid var(--sky-line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .cfq-faq-q {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 13px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    cursor: pointer;
+    font-family: inherit;
+    line-height: 1.35;
+  }
+  .cfq-faq-q .chev {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+    color: var(--teal);
+  }
+  .cfq-faq-item.open .cfq-faq-q .chev { transform: rotate(180deg); }
+  .cfq-faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+  .cfq-faq-item.open .cfq-faq-a { max-height: 400px; }
+  .cfq-faq-a-inner {
+    padding: 0 14px 14px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+    border-top: 1px solid var(--sky-line);
+    padding-top: 10px;
+    margin: 0 14px 14px;
+  }
+
+  .cfq-answer-box {
+    display: none;
+    background: var(--paper);
+    border: 1px solid var(--sky-line);
+    border-left: 4px solid var(--teal);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .cfq-answer-box .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--teal-dark);
+    margin-bottom: 4px;
+  }
 </style>
 </head>
 <body>
@@ -197,12 +269,16 @@
     <p>Toca una pregunta o escribe la tuya. Respondo al toque, 24/7.</p>
   </div>
   <div class="cfq-body">
-    <div class="cfq-chips-label">Las que más preguntan</div>
-    <div class="cfq-chips" id="cfq-chips"></div>
-    <div class="cfq-messages" id="cfq-messages"></div>
+    <div class="cfq-chips-label">Toca una pregunta para ver la respuesta</div>
+    <div class="cfq-faq-list" id="cfq-faq-list"></div>
+    <div class="cfq-chips-label">¿No encuentras tu pregunta? Escríbela aquí</div>
     <div class="cfq-inputbar">
       <input id="cfq-input" type="text" placeholder="Escribe tu pregunta aquí..." />
       <button class="cfq-send" id="cfq-send">Enviar</button>
+    </div>
+    <div class="cfq-answer-box" id="cfq-answer-box">
+      <div class="label" id="cfq-answer-label">Respuesta</div>
+      <div id="cfq-answer-text"></div>
     </div>
     <div class="cfq-footnote">Si tu pregunta no está en el temario del curso, se enviará directamente a la profesora.</div>
     <div class="cfq-credit">Elaborado por Romy Palacios · Docente CRT1 · UTP · 2026 · v1.0</div>
@@ -314,30 +390,40 @@
   const DEFAULT_CATEGORY = "Cómo se lleva a cabo el curso";
   const FALLBACK_TEXT = "Esa pregunta no está en las que tengo registradas todavía. Se la estoy comunicando directamente a tu docente; también puedes escribirle por el foro de consultas de la plataforma.";
 
-  const chipsEl = document.getElementById('cfq-chips');
-  const messagesEl = document.getElementById('cfq-messages');
+  const faqListEl = document.getElementById('cfq-faq-list');
   const inputEl = document.getElementById('cfq-input');
   const sendBtn = document.getElementById('cfq-send');
   const gformCategoria = document.getElementById('cfq-gform-categoria');
   const gformPregunta = document.getElementById('cfq-gform-pregunta');
   const gform = document.getElementById('cfq-gform');
+  const answerBox = document.getElementById('cfq-answer-box');
+  const answerLabel = document.getElementById('cfq-answer-label');
+  const answerText = document.getElementById('cfq-answer-text');
 
-  FAQ.forEach(item => {
-    const chip = document.createElement('button');
-    chip.className = 'cfq-chip';
-    chip.textContent = item.q;
-    chip.addEventListener('click', () => askDirect(item.q, item.a));
-    chipsEl.appendChild(chip);
+  FAQ.forEach((item, idx) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'cfq-faq-item';
+
+    const qBtn = document.createElement('button');
+    qBtn.className = 'cfq-faq-q';
+    qBtn.innerHTML = `<span>${item.q}</span><svg class="chev" viewBox="0 0 20 20" fill="none"><path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+    const aWrap = document.createElement('div');
+    aWrap.className = 'cfq-faq-a';
+    const aInner = document.createElement('div');
+    aInner.className = 'cfq-faq-a-inner';
+    aInner.textContent = item.a;
+    aWrap.appendChild(aInner);
+
+    qBtn.addEventListener('click', () => {
+      wrapper.classList.toggle('open');
+    });
+
+    wrapper.appendChild(qBtn);
+    wrapper.appendChild(aWrap);
+    faqListEl.appendChild(wrapper);
+    item._el = wrapper;
   });
-
-  function addMessage(text, sender) {
-    const msg = document.createElement('div');
-    msg.className = `cfq-msg ${sender}`;
-    msg.textContent = text;
-    messagesEl.appendChild(msg);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
-    return msg;
-  }
 
   function normalize(str) {
     return str
@@ -363,24 +449,30 @@
     return bestScore > 0 ? best : null;
   }
 
-  function askDirect(question, answer) {
-    addMessage(question, 'user');
-    addMessage(answer, 'bot');
-  }
-
   function forwardToTeacher(question) {
     gformCategoria.value = DEFAULT_CATEGORY;
     gformPregunta.value = question;
     gform.submit();
   }
 
+  function showAnswerBox(label, text) {
+    answerLabel.textContent = label;
+    answerText.textContent = text;
+    answerBox.style.display = 'block';
+    answerBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
   function askFreeform(question) {
-    addMessage(question, 'user');
     const match = findMatch(question);
     if (match) {
-      addMessage(match.a, 'bot');
+      // Abre y resalta la pregunta correspondiente en la lista, para que quede
+      // claro que ya existía como una de las preguntas frecuentes.
+      FAQ.forEach(item => item._el.classList.remove('open'));
+      match._el.classList.add('open');
+      match._el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      answerBox.style.display = 'none';
     } else {
-      addMessage(FALLBACK_TEXT, 'bot');
+      showAnswerBox('Tu pregunta', FALLBACK_TEXT);
       forwardToTeacher(question);
     }
   }
