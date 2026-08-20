@@ -297,7 +297,7 @@
   const FAQ = [
     {
       q: "¿El trabajo es obligatoriamente en equipo?",
-      a: "No. Puedes trabajar de manera individual o en equipos de hasta cuatro en todas las tareas, salvo el examen final, que es en pareja.",
+      a: "No, puedes trabajar de manera individual o en equipo de hasta cuatro integrantes en todas las tareas, salvo el examen final, que puede realizarse de manera individual o máximo en pareja.",
       keywords: ["equipo", "grupal", "individual", "solo", "pareja", "grupo de trabajo"]
     },
     {
@@ -384,11 +384,28 @@
       q: "¿Cuál es el tema de la PC1 o de las demás evaluaciones?",
       a: "Para conocer el tema de las siguientes evaluaciones (PC1, TA2, PC2, examen final), busca las fuentes de información en las actividades de la semana correspondiente a esa evaluación.",
       keywords: ["tema de la pc1", "tema de la pc2", "tema de la ta2", "tema del examen final", "tema de la evaluacion", "cual es el tema", "de que trata la tarea", "de que trata la evaluacion"]
+    },
+    {
+      q: "La tarea, ¿tiene tema asignado o es libre?",
+      a: "Nunca hay tema libre; todas las tareas tienen un tema ya asignado, y no lo asigna el docente directamente, sino que está indicado en la plataforma. Cada actividad señala de qué tema se trata o te remite a la fuente que debes revisar, así que si revisas bien el material no hay forma de confundirte.",
+      keywords: ["tema asignado", "tema libre", "cualquier tema", "tema de la tarea es libre", "puedo elegir el tema"]
+    },
+    {
+      q: "¿Cómo se hacen los esquemas?",
+      a: "Existe una estructura fija para la introducción y el cierre, que se encuentra en los materiales de la semana 1 y 2, en el desarrollo de los temas. Para la parte del desarrollo del texto, hay una estructura inicial de argumentación simple, pero semana a semana irán apareciendo nuevas estrategias de argumentación que variarán la estructura, por eso debes estar atento a revisar los materiales. Si quieres empezar a revisar cómo es, aquí tienes un video: https://youtu.be/uyNc0RzQY-U",
+      keywords: ["como se hacen los esquemas", "esquema", "estructura del esquema", "como hago el esquema"]
     }
   ];
 
   const DEFAULT_CATEGORY = "Cómo se lleva a cabo el curso";
   const FALLBACK_TEXT = "Esa pregunta no está en las que tengo registradas todavía. Se la estoy comunicando directamente a tu docente; también puedes escribirle por el foro de consultas de la plataforma.";
+  const OFF_TOPIC_TEXT = "Esa consulta no corresponde al curso de Comprensión y Redacción de Textos I. Para trámites académicos o administrativos (certificados, constancias, matrícula, pagos, carnet, becas, traslados), contacta al SAE (Servicio de Atención al Estudiante) de UTP, o revisa la página UTP+Info, donde encuentras todos los trámites que puede realizar el estudiante.";
+  const OFF_TOPIC_KEYWORDS = [
+    "certificado", "constancia", "matricula", "carnet", "pension",
+    "boleta de pago", "beca", "traslado de carrera", "retiro de curso",
+    "creditos", "curriculo", "mesa de partes", "tramite", "convalidacion",
+    "duplicado de carnet", "carta de", "seguro estudiantil", "pago de pension"
+  ];
 
   const faqListEl = document.getElementById('cfq-faq-list');
   const inputEl = document.getElementById('cfq-input');
@@ -462,6 +479,11 @@
     answerBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
+  function isOffTopic(userText) {
+    const normalizedInput = normalize(userText);
+    return OFF_TOPIC_KEYWORDS.some(kw => normalizedInput.includes(normalize(kw)));
+  }
+
   function askFreeform(question) {
     const match = findMatch(question);
     if (match) {
@@ -471,6 +493,10 @@
       match._el.classList.add('open');
       match._el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       answerBox.style.display = 'none';
+    } else if (isOffTopic(question)) {
+      showAnswerBox('Tu pregunta', OFF_TOPIC_TEXT);
+      // No se reenvía al formulario: es un trámite ajeno al curso, no algo
+      // que la docente deba gestionar.
     } else {
       showAnswerBox('Tu pregunta', FALLBACK_TEXT);
       forwardToTeacher(question);
